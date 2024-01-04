@@ -6,6 +6,7 @@ var logger = require("morgan");
 const cors = require("cors");
 
 var indexRouter = require("./routes/index");
+const apiRouter = require("./api");
 
 // Connect to database
 const mongoose = require("mongoose");
@@ -14,6 +15,7 @@ const mongoDB = process.env.MONGOPASS;
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
+  console.log("connected");
 }
 
 var app = express();
