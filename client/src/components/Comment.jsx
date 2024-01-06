@@ -11,8 +11,10 @@
 import PropTypes from "prop-types";
 import styles from "../assets/Post.module.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const Comment = ({ comment, url }) => {
+const Comment = ({ comment, url, setPost }) => {
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const authenticated = localStorage.getItem("userID") == comment.author._id;
 
@@ -27,12 +29,13 @@ const Comment = ({ comment, url }) => {
     if (deleteCommentRes.status == 401) return navigate("/login");
     const deleteCommentData = await deleteCommentRes.json();
     if (deleteCommentData.status == 200) {
-      // do something about it
-    } else; // show that they were not authenticated or something
+      setPost(deleteCommentData.newPost);
+    } else setError(deleteCommentData.message);
   };
 
   return (
     <div className={styles.commentContainer}>
+      {!error.length == 0 && <p>{error}</p>}
       <p>{comment.message}</p>
       <p>{comment.date}</p>
       <p>{comment.author.name}</p>
@@ -51,6 +54,7 @@ const Comment = ({ comment, url }) => {
 Comment.propTypes = {
   comment: PropTypes.object,
   url: PropTypes.string.isRequired,
+  setPost: PropTypes.func.isRequired,
 };
 
 export default Comment;
