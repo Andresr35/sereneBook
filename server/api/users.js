@@ -17,8 +17,8 @@ router.post("/login", logIn);
 router.use(authenticateToken);
 
 router.get("/", getUsers);
-router.get("/:userId", getUser);
-router.get("/:userId/messages", getUserMessages);
-router.get("/:userId/posts", getUserPosts);
+router.get("/:userID", getUser);
+router.get("/:userID/messages", getUserMessages);
+router.get("/:userID/posts", getUserPosts);
 
 module.exports = router;

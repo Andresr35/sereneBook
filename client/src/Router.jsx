@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
-// import Chat from "./pages/Chat";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 
 const Router = () => {
   const url =
@@ -9,7 +11,9 @@ const Router = () => {
 
   const router = createBrowserRouter([
     { path: "/", element: <Home url={url} /> },
-    // { path: "/chat", element: <Chat url={url} /> },
+    { path: "/login", element: <Login url={url} /> },
+    { path: "/signup", element: <Signup url={url} /> },
+    { path: "/profile", element: <Profile url={url} /> },
   ]);
   return <RouterProvider router={router} />;
 };

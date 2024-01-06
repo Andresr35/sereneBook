@@ -4,7 +4,7 @@ const jwt = require("../jwt");
 const User = require("../models/User");
 const Message = require("../models/Message");
 const Post = require("../models/Post");
-const { body, validationResult } = require("express-validator");
+// const { body, validationResult } = require("express-validator");
 
 exports.signUp = asyncHandler(async (req, res, next) => {
   const { name, email, password, age, gender, bio } = req.body;
@@ -62,6 +62,7 @@ exports.logIn = asyncHandler(async (req, res, next) => {
 
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find().exec();
+  // console.log(req.userID);
   res.status(200).json({
     message: "Attatched are the users",
     users,
@@ -72,7 +73,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.userID).exec();
   res.status(200).json({
-    message: "Attatched are the users",
+    message: "Attatched is the user",
     user,
     status: 200,
   });
@@ -80,7 +81,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
 exports.getUserMessages = asyncHandler(async (req, res, next) => {
   const messages = await Message.find({
-    $or: [{ messenger: req.params.userId }, { reciever: req.params.userId }],
+    $or: [{ messenger: req.params.userID }, { reciever: req.params.userID }],
   }).exec();
   return res.status(200).json({ message: "Success", status: 200, messages });
 });
@@ -92,7 +93,7 @@ exports.getUserPosts = asyncHandler(async (req, res, next) => {
     user = await User.findById(req.params.userID, "friends").exec();
   }
   const posts = await Post.find({
-    author: [req.params.userId, ...user.friends],
+    author: [req.params.userID, ...user.friends],
   }).exec();
   return res.status(200).json({
     message: "User Posts",

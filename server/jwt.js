@@ -6,16 +6,16 @@ exports.authenticateToken = function (req, res, next) {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
     if (err) return res.sendStatus(403);
-    req.user = user;
+    req.userID = payload.userID;
 
     return next();
   });
 };
 
-exports.generateToken = (name) => {
+exports.generateToken = (userID) => {
   const opts = {};
   opts.expiresIn = "1h";
-  return jwt.sign({ name }, process.env.TOKEN_SECRET, opts);
+  return jwt.sign({ userID }, process.env.TOKEN_SECRET, opts);
 };
