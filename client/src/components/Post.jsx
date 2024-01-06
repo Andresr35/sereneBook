@@ -12,10 +12,33 @@ import PropTypes from "prop-types";
 import styles from "../assets/Post.module.css";
 import { useState } from "react";
 import Comment from "./Comment";
+import { useNavigate } from "react-router-dom";
 
-const Post = ({ post }) => {
+const Post = ({ post, setNewPost, url }) => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [openComments, setOpenComments] = useState(false);
   const handleComment = setOpenComments(!openComments);
+
+  const addComment = async (e) => {
+    e.preventDefault();
+    const addCommentRes = await fetch(`${url}/api/posts/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        message: e.target.comment.value,
+        author: localStorage.getItem("userID"),
+      }),
+    });
+    if (addCommentRes.status == 401) return navigate("/login");
+    const addCommentData = await addCommentRes.json();
+    if (addCommentData.status == 201) {
+      // start doing stuff
+    } else setError(addCommentData.message);
+  };
 
   return (
     <div className={styles.postContainer}>
@@ -28,12 +51,10 @@ const Post = ({ post }) => {
       {openComments && (
         <div className={styles.commentsContainer}>
           {post.comments.map((comment, index) => (
-            <Comment comment={comment} key={index} />
+            <Comment comment={comment} key={index} setPost={setNewPost} />
           ))}
-          <form
-            className={styles.addComment}
-            onSubmit={(e) => addComment(e, blog._id)}
-          >
+          <form className={styles.addComment} onSubmit={addComment}>
+            {!error.length == 0 && <p>{error}</p>}
             <input type="text" name="comment" placeholder="Add Comment" />
             <button className={styles.add} type="submit">
               <img src="../../checkmark-svgrepo-com.svg" alt="Delete Button" />
@@ -53,6 +74,10 @@ const Post = ({ post }) => {
   );
 };
 
-Post.propTypes = { post: PropTypes.object };
+Post.propTypes = {
+  post: PropTypes.object,
+  setNewPost: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+};
 
 export default Post;

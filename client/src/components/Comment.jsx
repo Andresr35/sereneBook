@@ -24,6 +24,9 @@ const Comment = ({ comment, url, setPost }) => {
       `${url}/api/posts/comments/${commentID}`,
       {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
       }
     );
     if (deleteCommentRes.status == 401) return navigate("/login");
@@ -44,7 +47,7 @@ const Comment = ({ comment, url, setPost }) => {
           className={styles.delete}
           onClick={(e) => deleteComment(e, comment._id)}
         >
-          <img src="../../delete-svgrepo-com.svg" alt="Delete Button" />
+          <img src="/delete.svg" alt="Delete Button" />
         </button>
       )}
     </div>
