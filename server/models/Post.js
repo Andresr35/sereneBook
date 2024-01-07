@@ -10,7 +10,6 @@ const PostSchema = new Schema({
   },
   timestamp: {
     type: Date,
-    required: true,
     default: Date.now,
   },
   message: {

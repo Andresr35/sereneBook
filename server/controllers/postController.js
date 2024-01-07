@@ -58,7 +58,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   if (postID.length != 24)
     return res
       .status(400)
-      .json({ message: "Comment ID must be 24 char long", status: 400 });
+      .json({ message: "Post ID must be 24 char long", status: 400 });
   if (userID != tokenUserID)
     return res.status(401).json({
       message: "Your userID and token ID do not match",
@@ -133,5 +133,35 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Post was deleted",
     status: 200,
+  });
+});
+
+exports.addPost = asyncHandler(async (req, res, next) => {
+  const { message, userID, title } = req.body;
+  const tokenUserID = req.userID;
+  if (!message || !userID || !title)
+    return res.status(400).json({
+      message: "message or userID or title were not provided",
+      status: 400,
+    });
+  if (userID.length != 24)
+    return res
+      .status(400)
+      .json({ message: "User ID must be 24 char long", status: 400 });
+  if (userID != tokenUserID)
+    return res.status(401).json({
+      message: "Your userID and token ID do not match",
+      status: 401,
+    });
+  const newPost = new Post({
+    author: userID,
+    message: message,
+    title: title,
+  });
+  await newPost.save();
+  res.status(201).json({
+    message: "Post was created!",
+    status: 201,
+    newPost: newPost,
   });
 });
