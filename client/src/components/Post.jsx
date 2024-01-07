@@ -52,7 +52,7 @@ const Post = ({ post, setNewPost, url }) => {
     });
     if (deletePostRes.status == 401) return navigate("/login");
     const deletePostData = await deletePostRes.json();
-    if (deletePostData.status == 200) setNewPost(deletePostData.newPost);
+    if (deletePostData.status == 200) setNewPost({});
     else setDeletePostError(deletePostData.message);
   };
 

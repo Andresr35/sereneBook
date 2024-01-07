@@ -112,3 +112,26 @@ exports.handleLike = asyncHandler(async (req, res, next) => {
     newPost: post,
   });
 });
+
+exports.deletePost = asyncHandler(async (req, res, next) => {
+  const { postID } = req.params;
+  const tokenUserID = req.userID;
+  if (postID.length != 24)
+    return res
+      .status(400)
+      .json({ message: "Post ID must be 24 char long", status: 400 });
+
+  const post = await Post.findById(postID).exec();
+  if (!post)
+    return res.status(400).json({ message: "Post not found", status: 400 });
+  if (post.author != tokenUserID)
+    return res.status(401).json({
+      message: "You are not the author of this post",
+      status: 401,
+    });
+  await post.deleteOne();
+  res.status(200).json({
+    message: "Post was deleted",
+    status: 200,
+  });
+});
