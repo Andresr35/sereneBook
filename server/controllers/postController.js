@@ -15,32 +15,32 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
       .status(400)
       .json({ message: "Comment ID must be 24 char long", status: 400 });
 
-  const post = await Post.findOne(
-    { "comments._id": new mongoose.Types.ObjectId(commentID) },
-    {
-      comments: { $elemMatch: { _id: commentID } },
-    }
-  ).populate({
-    path: "comments",
-    populate: "author",
-  });
-  console.log(post);
+  const post = await Post.findOne({ "comments._id": commentID })
+    .populate({
+      path: "comments",
+      populate: "author",
+    })
+    .exec();
   if (!post)
     return res.status(400).json({ message: "Post not found", status: 400 });
-  if (post.comments[0].author._id != tokenUserID)
+  const comment = post.comments.find(
+    (comment) => comment.author._id == tokenUserID
+  );
+  if (comment === undefined)
+    return res.status(400).json({
+      message: "Comment was not found",
+      status: 401,
+    });
+  if (comment.author._id != tokenUserID)
     return res.status(401).json({
       message: "You must be the author of this comment in order to delete",
       status: 401,
     });
-  const newPost = await post.updateOne(
-    {
-      $pull: { comments: { _id: commentID } },
-    },
-    { new: true }
-  );
+  comment.deleteOne();
+  await post.save();
   res.status(200).json({
     message: "Deleted Comment",
-    newPost,
+    post,
     status: 200,
   });
 });
@@ -72,7 +72,7 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     message: "Comment was created!",
     status: 201,
-    newPost,
+    newPost: post,
   });
 });
 
@@ -99,14 +99,14 @@ exports.handleLike = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(postID).exec();
   if (!post)
     return res.status(400).json({ message: "Post not found", status: 400 });
-  const isLiked = post.likes.includes({ _id: userID });
-  if (isLiked) {
-    post.likes.find({ _id: userID }).deleteOne();
+  const isLiked = post.likes.find((like) => like.author == userID);
+  if (!isLiked) {
+    post.likes.push({ author: userID });
   } else {
-    post.likes.push({ _id: userID });
+    isLiked.deleteOne();
   }
   await post.save();
-  res.status(201).json({
+  res.status(200).json({
     message: "Post like handled",
     status: 200,
     newPost: post,

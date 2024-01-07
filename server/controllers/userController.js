@@ -50,7 +50,7 @@ exports.logIn = asyncHandler(async (req, res, next) => {
       message: "Incorrect Password",
       status: 400,
     });
-  const token = jwt.generateToken(email);
+  const token = jwt.generateToken(user._id);
   delete user._doc.password;
   res.status(200).json({
     status: 200,
@@ -94,7 +94,9 @@ exports.getUserPosts = asyncHandler(async (req, res, next) => {
   }
   const posts = await Post.find({
     author: [req.params.userID, ...user.friends],
-  }).exec();
+  })
+    .populate(["author", { path: "comments", populate: "author" }])
+    .exec();
   return res.status(200).json({
     message: "User Posts",
     status: 200,

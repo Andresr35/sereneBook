@@ -21,7 +21,7 @@ const CreatePost = ({ url, setNewPost }) => {
       body: JSON.stringify({
         title: input.title,
         message: input.message,
-        author: localStorage.getItem("userID"),
+        userID: localStorage.getItem("userID"),
       }),
     });
     if (res.status == 401) return navigate("/login");

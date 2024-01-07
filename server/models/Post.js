@@ -38,7 +38,7 @@ const PostSchema = new Schema({
         required: true,
         trim: true,
       },
-      date: {
+      timestamp: {
         type: Date,
         default: Date.now(),
       },
@@ -51,16 +51,20 @@ const PostSchema = new Schema({
   ],
 });
 
-PostSchema.virtual("url").get(function () {
-  return `/post/${this._id}`;
-});
-
 PostSchema.virtual("date").get(function () {
   return DateTime.fromJSDate(this.timestamp).toLocaleString(
     DateTime.DATE_SHORT
   );
 });
-
+PostSchema.path("comments")
+  .schema.virtual("date")
+  .get(function () {
+    return DateTime.fromJSDate(this.timestamp).toLocaleString(
+      DateTime.DATE_SHORT
+    );
+  });
+PostSchema.path("comments").schema.set("toObject", { virtuals: true });
+PostSchema.path("comments").schema.set("toJSON", { virtuals: true });
 PostSchema.set("toObject", { virtuals: true });
 PostSchema.set("toJSON", { virtuals: true });
 
