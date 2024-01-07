@@ -1,13 +1,16 @@
 import PropTypes from "prop-types";
 import Nav from "../components/Nav";
-import { useUser } from "../hooks/useUser";
+// import { useUser } from "../hooks/useUser";
+import Posts from "../components/Posts";
 
 const Profile = ({ url }) => {
-  const user = useUser(url);
+  // const user = useUser(url);
   return (
     <>
-      <Nav />
-      <main>Profile</main>
+      <Nav header={"Profile"} />
+      <main>
+        <Posts url={url} />
+      </main>
     </>
   );
 };

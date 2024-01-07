@@ -9,7 +9,7 @@ const CreatePost = ({ url, setNewPost }) => {
     title: "",
     message: "",
   });
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
   const createPost = async (e) => {
     e.preventDefault();
     const res = await fetch(`${url}/api/posts`, {
@@ -28,7 +28,10 @@ const CreatePost = ({ url, setNewPost }) => {
     const data = await res.json();
     if (data.status == 201) setNewPost(data.newPost);
     else setError(data.message);
+    setInput({ title: "", message: "" });
+    e.target.reset();
   };
+
   return (
     <div>
       {!error.length == 0 && <p>{error}</p>}

@@ -16,10 +16,13 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
       .json({ message: "Comment ID must be 24 char long", status: 400 });
 
   const post = await Post.findOne({ "comments._id": commentID })
-    .populate({
-      path: "comments",
-      populate: "author",
-    })
+    .populate([
+      {
+        path: "comments",
+        populate: "author",
+      },
+      "author",
+    ])
     .exec();
   if (!post)
     return res.status(400).json({ message: "Post not found", status: 400 });
@@ -40,7 +43,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   await post.save();
   res.status(200).json({
     message: "Deleted Comment",
-    post,
+    newPost: post,
     status: 200,
   });
 });
@@ -64,7 +67,15 @@ exports.addComment = asyncHandler(async (req, res, next) => {
       message: "Your userID and token ID do not match",
       status: 401,
     });
-  const post = await Post.findById(postID).exec();
+  const post = await Post.findById(postID)
+    .populate([
+      {
+        path: "comments",
+        populate: "author",
+      },
+      "author",
+    ])
+    .exec();
   if (!post)
     return res.status(400).json({ message: "Post not found", status: 400 });
   post.comments.push({ message: message, author: userID });
@@ -96,7 +107,15 @@ exports.handleLike = asyncHandler(async (req, res, next) => {
       status: 401,
     });
 
-  const post = await Post.findById(postID).exec();
+  const post = await Post.findById(postID)
+    .populate([
+      {
+        path: "comments",
+        populate: "author",
+      },
+      "author",
+    ])
+    .exec();
   if (!post)
     return res.status(400).json({ message: "Post not found", status: 400 });
   const isLiked = post.likes.find((like) => like.author == userID);

@@ -44,7 +44,7 @@ const Comment = ({ comment, url, setPost }) => {
       <p>{comment.author.name}</p>
       {authenticated && (
         <button
-          className={styles.delete}
+          className={styles.icon}
           onClick={(e) => deleteComment(e, comment._id)}
         >
           <img src="/delete.svg" alt="Delete Button" />

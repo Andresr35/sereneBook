@@ -20,7 +20,7 @@ const Post = ({ post, setNewPost, url }) => {
   const [handleLikeError, setHandleLikeError] = useState("");
   const [deletePostError, setDeletePostError] = useState("");
   const [openComments, setOpenComments] = useState(false);
-  const handleComment = setOpenComments(!openComments);
+  const handleComment = () => setOpenComments(!openComments);
   const authenticated = localStorage.getItem("userID") == post.author._id;
 
   const addComment = async (e) => {
@@ -33,7 +33,7 @@ const Post = ({ post, setNewPost, url }) => {
       },
       body: JSON.stringify({
         message: e.target.comment.value,
-        author: localStorage.getItem("userID"),
+        userID: localStorage.getItem("userID"),
       }),
     });
     if (addCommentRes.status == 401) return navigate("/login");
@@ -79,12 +79,24 @@ const Post = ({ post, setNewPost, url }) => {
       <h4>{post.title}</h4>
       <hr />
       <p>{post.message}</p>
-      <p className={styles.timestamp}>Created: {post.timestamp}</p>
-      <p>{post.author._id}</p>
+      <p className={styles.timestamp}>Created: {post.date}</p>
+      <p>{post.author.name}</p>
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}
 
       <p onClick={handleLike}>Likes: {post.likes.length}</p>
-      <button onClick={handleComment}>Open Comments</button>
+      <button className={styles.icon} onClick={handleComment}>
+        <div>{post.comments.length}</div>
+        <img src="/chat.svg" alt="chat button img" />
+      </button>
+      {authenticated && (
+        <>
+          {!deletePostError.length == 0 && <p>{deletePostError}</p>}
+
+          <button className={styles.icon} onClick={deletePost}>
+            <img src="/delete.svg" alt="Delete post" />
+          </button>
+        </>
+      )}
       {openComments && (
         <div className={styles.commentsContainer}>
           {post.comments.map((comment, index) => (
@@ -98,20 +110,11 @@ const Post = ({ post, setNewPost, url }) => {
           <form className={styles.addComment} onSubmit={addComment}>
             {!addCommentError.length == 0 && <p>{addCommentError}</p>}
             <input type="text" name="comment" placeholder="Add Comment" />
-            <button className={styles.add} type="submit">
+            <button className={styles.icon} type="submit">
               <img src="/send.svg" alt="Add comment Button" />
             </button>
           </form>
         </div>
-      )}
-      {authenticated && (
-        <>
-          {!deletePostError.length == 0 && <p>{deletePostError}</p>}
-
-          <button className={styles.delete} onClick={deletePost}>
-            <img src="/delete.svg" alt="Delete Button" />
-          </button>
-        </>
       )}
     </div>
   );
