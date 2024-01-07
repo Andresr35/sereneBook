@@ -88,7 +88,12 @@ const Post = ({ post, setNewPost, url }) => {
       {openComments && (
         <div className={styles.commentsContainer}>
           {post.comments.map((comment, index) => (
-            <Comment comment={comment} key={index} setPost={setNewPost} />
+            <Comment
+              comment={comment}
+              key={index}
+              setPost={setNewPost}
+              url={url}
+            />
           ))}
           <form className={styles.addComment} onSubmit={addComment}>
             {!addCommentError.length == 0 && <p>{addCommentError}</p>}
