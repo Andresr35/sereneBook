@@ -8,7 +8,7 @@ const Post = require("../models/Post");
 
 exports.signUp = asyncHandler(async (req, res, next) => {
   const { name, email, password, age, gender, bio } = req.body;
-  if (!email && !name && !password)
+  if (!email || !name || !password)
     res
       .status(400)
       .json({ status: 400, message: "email, name, or password is missing" });
@@ -33,7 +33,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
 
 exports.logIn = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email && !password)
+  if (!email || !password)
     return res.status(400).json({
       message: "Email or password were not provided",
       status: 400,

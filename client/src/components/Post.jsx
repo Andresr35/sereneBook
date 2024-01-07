@@ -22,7 +22,7 @@ const Post = ({ post, setNewPost, url }) => {
 
   const addComment = async (e) => {
     e.preventDefault();
-    const addCommentRes = await fetch(`${url}/api/posts/comments`, {
+    const addCommentRes = await fetch(`${url}/api/posts/${post._id}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
