@@ -18,8 +18,10 @@ const Post = ({ post, setNewPost, url }) => {
   const navigate = useNavigate();
   const [addCommentError, setAddCommentError] = useState("");
   const [handleLikeError, setHandleLikeError] = useState("");
+  const [deletePostError, setDeletePostError] = useState("");
   const [openComments, setOpenComments] = useState(false);
   const handleComment = setOpenComments(!openComments);
+  const authenticated = localStorage.getItem("userID") == post.author._id;
 
   const addComment = async (e) => {
     e.preventDefault();
@@ -38,6 +40,20 @@ const Post = ({ post, setNewPost, url }) => {
     const addCommentData = await addCommentRes.json();
     if (addCommentData.status == 201) setNewPost(addCommentData.newPost);
     else setAddCommentError(addCommentData.message);
+  };
+
+  const deletePost = async (e) => {
+    e.preventDefault();
+    const deletePostRes = await fetch(`${url}/api/posts/${post._id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+    if (deletePostRes.status == 401) return navigate("/login");
+    const deletePostData = await deletePostRes.json();
+    if (deletePostData.status == 200) setNewPost(deletePostData.newPost);
+    else setDeletePostError(deletePostData.message);
   };
 
   const handleLike = async (e) => {
@@ -64,6 +80,7 @@ const Post = ({ post, setNewPost, url }) => {
       <hr />
       <p>{post.message}</p>
       <p className={styles.timestamp}>Created: {post.timestamp}</p>
+      <p>{post.author._id}</p>
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}
 
       <p onClick={handleLike}>Likes: {post.likes.length}</p>
@@ -77,18 +94,19 @@ const Post = ({ post, setNewPost, url }) => {
             {!addCommentError.length == 0 && <p>{addCommentError}</p>}
             <input type="text" name="comment" placeholder="Add Comment" />
             <button className={styles.add} type="submit">
-              <img src="../../checkmark-svgrepo-com.svg" alt="Delete Button" />
+              <img src="/send.svg" alt="Add comment Button" />
             </button>
           </form>
         </div>
       )}
       {authenticated && (
-        <button
-          className={styles.delete}
-          onClick={(e) => deletePost(e, post._id)}
-        >
-          <img src="../../delete-svgrepo-com.svg" alt="Delete Button" />
-        </button>
+        <>
+          {!deletePostError.length == 0 && <p>{deletePostError}</p>}
+
+          <button className={styles.delete} onClick={deletePost}>
+            <img src="/delete.svg" alt="Delete Button" />
+          </button>
+        </>
       )}
     </div>
   );
