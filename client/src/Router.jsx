@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Friends from "./pages/Friends";
 
 const Router = () => {
   const url =
@@ -13,6 +14,7 @@ const Router = () => {
     { path: "/", element: <Home url={url} /> },
     { path: "/login", element: <Login url={url} /> },
     { path: "/signup", element: <Signup url={url} /> },
+    { path: "/friends", element: <Friends url={url} /> },
     { path: "/profile/:profileID", element: <Profile url={url} /> },
   ]);
   return <RouterProvider router={router} />;

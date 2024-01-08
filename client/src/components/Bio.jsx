@@ -1,22 +1,25 @@
 import PropTypes from "prop-types";
-import useUser from "../hooks/useUser";
 
-const Bio = ({ url }) => {
-  const user = useUser(url);
+const Bio = ({ user }) => {
   return (
     <div>
-      <h2>{user.name}</h2>
-      <img src={user.picture} alt="user picture" />
-      <p>
-        {user.age} {user.gender}
-      </p>
+      {/* <img src={user.picture} alt="user picture" /> */}
+      <div>
+        <h2>{user.name}</h2>
+        <p>
+          {/*  Put this header and p tag side by side */}
+          {user.age} | {user.gender}
+        </p>
+      </div>
+
       <p>{user.bio}</p>
     </div>
   );
 };
 
 Bio.propTypes = {
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default Bio;

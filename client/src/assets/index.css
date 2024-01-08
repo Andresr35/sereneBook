@@ -74,3 +74,6 @@ textarea,
 select {
   display: block;
 }
+button img {
+  width: 30px;
+}

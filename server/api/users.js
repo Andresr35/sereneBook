@@ -15,9 +15,15 @@ router.post("/login", logIn);
 
 // require authentication
 router.use(authenticateToken);
-router.get("/authenticate", async (req, res, next) => {
-  res.sendStatus(200);
-});
+router.get(
+  "/authenticate",
+  async (req, res, next) => {
+    req.statusCode = 200;
+    req.params.userID = req.userID;
+    next();
+  },
+  getUser
+);
 router.get("/", getUsers);
 router.get("/:userID", getUser);
 router.get("/:userID/messages", getUserMessages);

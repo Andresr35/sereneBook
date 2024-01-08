@@ -72,7 +72,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.userID).exec();
-  res.status(200).json({
+  res.json({
     message: "Attatched is the user",
     user,
     status: 200,

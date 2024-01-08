@@ -1,26 +1,13 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useThisUser from "../hooks/useThisUser";
 
-const Nav = ({ header, url }) => {
-  const [authenticated, setAuthenticaed] = useState(false);
-
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      const res = await fetch(`${url}/api/users/authenticate`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-      });
-      if (res.status == 200) setAuthenticaed(true);
-      else setAuthenticaed(false);
-    };
-    checkAuthentication();
-  }, []);
-
+const Nav = ({ header, url, children }) => {
+  const { authenticated } = useThisUser(url);
   return (
     <nav>
-      <div></div>
+      <div>{children}</div>
       <div>
         <h2>{header}</h2>
       </div>
@@ -35,6 +22,9 @@ const Nav = ({ header, url }) => {
                 <Link to={`/profile/${localStorage.getItem("userID")}`}>
                   Profile
                 </Link>
+              </li>
+              <li>
+                <Link to={"/friends"}>Find Friends</Link>
               </li>
             </>
           )}
@@ -55,6 +45,7 @@ const Nav = ({ header, url }) => {
 };
 
 Nav.propTypes = {
+  children: PropTypes.object,
   url: PropTypes.string.isRequired,
   header: PropTypes.string,
 };
