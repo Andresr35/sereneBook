@@ -36,7 +36,7 @@ const Login = ({ url }) => {
 
   return (
     <>
-      <Nav header={"Log In"} />
+      <Nav header={"Log In"} url={url} />
       <main>
         <form onSubmit={validateUser}>
           <label>

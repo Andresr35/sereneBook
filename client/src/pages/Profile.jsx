@@ -6,7 +6,7 @@ import Bio from "../components/Bio";
 const Profile = ({ url }) => {
   return (
     <>
-      <Nav header={"Profile"} />
+      <Nav header={"Profile"} url={url} />
       <main>
         <Bio url={url} />
         <Posts url={url} />

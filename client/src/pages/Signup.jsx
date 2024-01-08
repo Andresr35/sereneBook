@@ -46,7 +46,7 @@ const Signup = ({ url }) => {
 
   return (
     <>
-      <Nav header={"Sign Up"} />
+      <Nav header={"Sign Up"} url={url} />
       <main>
         <form onSubmit={signUp}>
           {!user.error.length == 0 && <p>{user.error}</p>}
