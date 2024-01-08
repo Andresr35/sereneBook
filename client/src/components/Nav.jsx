@@ -14,7 +14,9 @@ const Nav = ({ header }) => {
             <Link to={"/"}>Home</Link>
           </li>
           <li>
-            <Link to={"/profile"}>Profile</Link>
+            <Link to={`/profile/${localStorage.getItem("userID")}`}>
+              Profile
+            </Link>
           </li>
           <li>
             <Link to={"/login"}>Log in</Link>

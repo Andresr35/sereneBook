@@ -13,7 +13,7 @@ const Router = () => {
     { path: "/", element: <Home url={url} /> },
     { path: "/login", element: <Login url={url} /> },
     { path: "/signup", element: <Signup url={url} /> },
-    { path: "/profile", element: <Profile url={url} /> },
+    { path: "/profile/:profileID", element: <Profile url={url} /> },
   ]);
   return <RouterProvider router={router} />;
 };

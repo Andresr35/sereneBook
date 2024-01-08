@@ -40,6 +40,7 @@ const Post = ({ post, setNewPost, url }) => {
     const addCommentData = await addCommentRes.json();
     if (addCommentData.status == 201) setNewPost(addCommentData.newPost);
     else setAddCommentError(addCommentData.message);
+    e.target.reset();
   };
 
   const deletePost = async (e) => {
