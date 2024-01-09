@@ -8,6 +8,8 @@ const {
   getUser,
   getUserMessages,
   getUserPosts,
+  postFriendRequest,
+  putFriendRequest,
 } = require("../controllers/userController");
 
 router.post("/", signUp);
@@ -28,5 +30,7 @@ router.get("/", getUsers);
 router.get("/:userID", getUser);
 router.get("/:userID/messages", getUserMessages);
 router.get("/:userID/posts", getUserPosts);
+router.post("/:friendID/friendRequests", postFriendRequest);
+router.put("/:friendID/friendRequests", putFriendRequest);
 
 module.exports = router;

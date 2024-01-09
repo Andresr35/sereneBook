@@ -33,7 +33,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
 
 exports.logIn = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password)
+  if (!email && !password)
     return res.status(400).json({
       message: "Email or password were not provided",
       status: 400,
@@ -101,5 +101,117 @@ exports.getUserPosts = asyncHandler(async (req, res, next) => {
     message: "User Posts",
     status: 200,
     posts,
+  });
+});
+
+// Friend requested gets friend request. If friend request exists already, it is taken away.
+//  if they are friends already, send back a message back
+exports.postFriendRequest = asyncHandler(async (req, res, next) => {
+  const { friendID } = req.params;
+  const { userID } = req.body;
+  if (!userID)
+    return res.status(400).json({
+      message: "UserID was not provided",
+      status: 400,
+    });
+  if (friendID.length != 24 && userID.length != 24)
+    return res.status(400).json({
+      message: "Friend and user ID must be 24 char long",
+      status: 400,
+    });
+  const userRecieving = await User.findById(friendID).exec();
+  if (!userRecieving)
+    return res.status(400).json({ message: "User not found", status: 400 });
+  const requester = await User.findById(userID).exec();
+  if (!requester)
+    return res.status(400).json({ message: "User not found", status: 400 });
+  const areFriends = responder.friends.includes(userID);
+  const isRequested = userRecieving.friendRequests.indexOf(userID);
+
+  if (areFriends) {
+    userRecieving.friendRequests.splice(isRequested, 1);
+    return res.status(400).json({
+      message: "They are friends already",
+      status: 400,
+    });
+  }
+  if (isRequested == -1) {
+    userRecieving.friendRequests.push(userID);
+  } else {
+    userRecieving.friendRequests.splice(isRequested, 1);
+  }
+
+  await userRecieving.save();
+  res.status(201).json({
+    status: 201,
+    message: "Handled Friend Request",
+    userRecieving,
+  });
+});
+
+// User is either rejecting or accepting friend request, if rejected splice
+//  friend request. if accepted add this requested user on the friends list of both?
+//  if they are already friends, just take off the friend request.
+exports.putFriendRequest = asyncHandler(async (req, res, next) => {
+  const { friendID } = req.params;
+  const { userID, accepted } = req.body;
+  if (!userID)
+    return res.status(400).json({
+      message: "UserID was not provided",
+      status: 400,
+    });
+  if (friendID.length != 24 && userID.length != 24)
+    return res.status(400).json({
+      message: "Friend and user ID must be 24 char long",
+      status: 400,
+    });
+  const userRequesting = await User.findById(friendID).exec();
+  if (!userRequesting)
+    return res.status(400).json({ message: "Friend not found", status: 400 });
+  const responder = await User.findById(userID).exec();
+  if (!responder)
+    return res.status(400).json({ message: "User not found", status: 400 });
+  const areFriends = responder.friends.includes(userRequesting._id);
+  const requestIndex = responder.friendRequests.indexOf(userRequesting._id);
+
+  if (requestIndex == -1) {
+    return res.status(400).json({
+      message: "You did not have a friend request from this user",
+      status: 400,
+      requestIndex,
+      userRequesting,
+      responder,
+    });
+  }
+  if (areFriends) {
+    responder.friendRequests.splice(requestIndex, 1);
+    await responder.save();
+    return res.status(200).json({
+      message: "They are friends already",
+      status: 200,
+      responder,
+      userRequesting,
+    });
+  }
+  if (accepted) {
+    responder.friendRequests.splice(requestIndex, 1);
+    userRequesting.friends.push(responder._id);
+    responder.friends.push(userRequesting._id);
+    await responder.save();
+    await userRequesting.save();
+    return res.status(200).json({
+      message: "They are now friends",
+      status: 200,
+      userRequesting,
+      responder,
+    });
+  }
+  responder.friendRequests.splice(requestIndex, 1);
+  await responder.save();
+  return res.status(200).json({
+    status: 200,
+    message: "Friend request was rejected",
+    userRequesting,
+    responder,
   });
 });
