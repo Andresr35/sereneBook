@@ -82,6 +82,11 @@ const Post = ({ post, setNewPost, url }) => {
       <p>{post.message}</p>
       <p className={styles.timestamp}>Created: {post.date}</p>
       <p>
+        <img
+          style={{ width: "50px", borderRadius: "100%" }}
+          src={post.author.picture}
+          alt="user Picture"
+        />
         <Link to={post.author.url}>{post.author.name}</Link>
       </p>
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}

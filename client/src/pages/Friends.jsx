@@ -3,20 +3,28 @@ import Nav from "../components/Nav";
 import useUsers from "../hooks/useUsers";
 import useThisUser from "../hooks/useThisUser";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Friends = ({ url }) => {
   const { users, setUsers } = useUsers(url);
-  const { user } = useThisUser(url);
+  const { user, setUser } = useThisUser(url);
+  const [errors, setErrors] = useState({
+    handleRequestError: "",
+    friendRequestError: "",
+  });
   const navigate = useNavigate();
 
   const filterFriends = () => {
     // Make sure this is not current user and any of users friends
     if (!users) return [];
     if (!user) return [];
+
     return users.filter((friend) =>
       friend._id != user._id
-        ? !user.friends.includes(friend._id)
-          ? true
+        ? !user.friends.find((request) => request._id == friend._id)
+          ? !user.friendRequests.find((request) => request._id == friend._id)
+            ? true
+            : false
           : false
         : false
     );
@@ -46,6 +54,8 @@ const Friends = ({ url }) => {
       );
       newUsers[newUserIndex] = fetchData.userRecieving;
       setUsers(newUsers);
+    } else {
+      setErrors({ ...errors, friendRequestError: fetchData.message });
     }
   };
 
@@ -54,30 +64,98 @@ const Friends = ({ url }) => {
     return possibleFriend.friendRequests.includes(user._id);
   };
 
+  const handleRequest = async (e, accept, friendID) => {
+    e.preventDefault();
+    const res = await fetch(`${url}/api/users/${friendID}/friendRequests`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userID: user._id,
+        accepted: accept,
+      }),
+    });
+    if (res.status == 401) return navigate("/login");
+    const data = await res.json();
+    if (data.status == 200) {
+      setUser(data.userRequesting);
+    } else {
+      setErrors({ ...errors, handleRequestError: data.message });
+    }
+  };
+
   return (
     <>
       <Nav header={"Add new friends?"} url={url} />
       <main>
         <div>
-          {users &&
-            filterFriends().map((possibleFriend, index) => (
-              <p key={index}>
-                <Link to={possibleFriend.url}> {possibleFriend.name}</Link>
-
-                <button
-                  onClick={(e) => sendFriendRequest(e, possibleFriend._id)}
-                >
+          <div>
+            <p>Current Friends</p>
+            {user &&
+              user.friends.map((friend, index) => (
+                <div key={index}>
                   <img
-                    src={
-                      previouslyRequested(possibleFriend)
-                        ? "/check.svg"
-                        : "/plus.svg"
-                    }
-                    alt="add friend button"
+                    style={{ width: "50px", borderRadius: "100%" }}
+                    src={friend.picture}
+                    alt="user Picture"
                   />
-                </button>
-              </p>
-            ))}
+                  <Link to={friend.url}>{friend.name}</Link>
+                </div>
+              ))}
+          </div>
+          <div>
+            <p>Current Requests</p>
+            {/* Here will lie the friend request */}
+            {!errors.handleRequestError.length == 0 && (
+              <p>{errors.handleRequestError}</p>
+            )}
+            {user &&
+              user.friendRequests.map((request, index) => (
+                <div key={index}>
+                  <img
+                    style={{ width: "50px", borderRadius: "100%" }}
+                    src={request.picture}
+                    alt="user Picture"
+                  />
+                  <Link to={request.url}>{request.name}</Link>
+                  <button onClick={(e) => handleRequest(e, true, request._id)}>
+                    <img src="plus.svg" alt="accept friend" />
+                  </button>
+                  <button onClick={(e) => handleRequest(e, false, request._id)}>
+                    <img src="delete.svg" alt="reject friend" />
+                  </button>
+                </div>
+              ))}
+          </div>
+          <div>
+            <p>Add?</p>
+            {users &&
+              filterFriends().map((possibleFriend, index) => (
+                <p key={index}>
+                  <img
+                    style={{ width: "50px", borderRadius: "100%" }}
+                    src={possibleFriend.picture}
+                    alt="user Picture"
+                  />
+                  <Link to={possibleFriend.url}> {possibleFriend.name}</Link>
+
+                  <button
+                    onClick={(e) => sendFriendRequest(e, possibleFriend._id)}
+                  >
+                    <img
+                      src={
+                        previouslyRequested(possibleFriend)
+                          ? "/check.svg"
+                          : "/plus.svg"
+                      }
+                      alt="add friend button"
+                    />
+                  </button>
+                </p>
+              ))}
+          </div>
         </div>
       </main>
     </>

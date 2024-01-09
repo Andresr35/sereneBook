@@ -1,3 +1,7 @@
+/**
+ * TODO
+ * Still need to add something for images
+ */
 import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
 import PropTypes from "prop-types";

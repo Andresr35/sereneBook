@@ -71,7 +71,9 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.userID).exec();
+  const user = await User.findById(req.params.userID)
+    .populate(["friendRequests", "friends"])
+    .exec();
   res.json({
     message: "Attatched is the user",
     user,
@@ -120,7 +122,9 @@ exports.postFriendRequest = asyncHandler(async (req, res, next) => {
       message: "Friend and user ID must be 24 char long",
       status: 400,
     });
-  const userRecieving = await User.findById(friendID).exec();
+  const userRecieving = await User.findById(friendID)
+    .populate(["friendRequests", "friends"])
+    .exec();
   if (!userRecieving)
     return res.status(400).json({ message: "User not found", status: 400 });
   const requester = await User.findById(userID).exec();

@@ -22,7 +22,7 @@ const useThisUser = (url) => {
     };
     checkAuthentication();
   }, []);
-  return { user, authenticated };
+  return { user, setUser, authenticated };
 };
 
 export default useThisUser;
