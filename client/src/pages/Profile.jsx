@@ -18,7 +18,7 @@ const Profile = ({ url }) => {
       </Nav>
       <main>
         <Bio url={url} user={user} />
-        <Posts url={url} />
+        <Posts url={url} includeFriends={false} />
       </main>
     </>
   );

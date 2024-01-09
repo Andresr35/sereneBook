@@ -87,14 +87,15 @@ exports.getUserMessages = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUserPosts = asyncHandler(async (req, res, next) => {
-  const { include } = req.query;
+  const { includeFriends } = req.query;
   let user = { friends: [] };
-  if (include == "friends") {
+  if (includeFriends == "true") {
     user = await User.findById(req.params.userID, "friends").exec();
   }
   const posts = await Post.find({
     author: [req.params.userID, ...user.friends],
   })
+    .sort({ timestamp: "desc" })
     .populate(["author", { path: "comments", populate: "author" }])
     .exec();
   return res.status(200).json({
@@ -125,7 +126,7 @@ exports.postFriendRequest = asyncHandler(async (req, res, next) => {
   const requester = await User.findById(userID).exec();
   if (!requester)
     return res.status(400).json({ message: "User not found", status: 400 });
-  const areFriends = responder.friends.includes(userID);
+  const areFriends = requester.friends.includes(userID);
   const isRequested = userRecieving.friendRequests.indexOf(userID);
 
   if (areFriends) {

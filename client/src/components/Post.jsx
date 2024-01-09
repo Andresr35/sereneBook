@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import styles from "../assets/Post.module.css";
 import { useState } from "react";
 import Comment from "./Comment";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Post = ({ post, setNewPost, url }) => {
   const navigate = useNavigate();
@@ -81,7 +81,9 @@ const Post = ({ post, setNewPost, url }) => {
       <hr />
       <p>{post.message}</p>
       <p className={styles.timestamp}>Created: {post.date}</p>
-      <p>{post.author.name}</p>
+      <p>
+        <Link to={post.author.url}>{post.author.name}</Link>
+      </p>
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}
 
       <p onClick={handleLike}>Likes: {post.likes.length}</p>

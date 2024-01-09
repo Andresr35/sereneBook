@@ -15,5 +15,10 @@ const UserSchema = new Schema({
     type: String,
   },
 });
+UserSchema.virtual("url").get(function () {
+  return `/profile/${this._id}`;
+});
+UserSchema.set("toObject", { virtuals: true });
+UserSchema.set("toJSON", { virtuals: true });
 
 module.exports = mongoose.model("User", UserSchema);

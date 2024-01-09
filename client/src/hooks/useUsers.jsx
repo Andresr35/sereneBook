@@ -16,7 +16,7 @@ const useUsers = (url) => {
     };
     fetchUser();
   }, []);
-  return { users };
+  return { users, setUsers };
 };
 
 export default useUsers;

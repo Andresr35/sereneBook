@@ -3,8 +3,8 @@ import Post from "../components/Post";
 import usePosts from "../hooks/usePosts";
 import CreatePost from "./CreatePost";
 
-const Posts = ({ url }) => {
-  const { posts, setPosts } = usePosts(url);
+const Posts = ({ url, includeFriends }) => {
+  const { posts, setPosts } = usePosts(url, includeFriends);
   const setNewPost = (newPost, index) => {
     const newPosts = [...posts];
     if (Object.keys(newPost).length == 0 && index !== undefined)
@@ -32,6 +32,7 @@ const Posts = ({ url }) => {
 
 Posts.propTypes = {
   url: PropTypes.string.isRequired,
+  includeFriends: PropTypes.bool.isRequired,
 };
 
 export default Posts;
