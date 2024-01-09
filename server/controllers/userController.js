@@ -2,12 +2,11 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("../jwt");
 const User = require("../models/User");
-const Message = require("../models/Message");
 const Post = require("../models/Post");
 // const { body, validationResult } = require("express-validator");
 
 exports.signUp = asyncHandler(async (req, res, next) => {
-  const { name, email, password, age, gender, bio } = req.body;
+  const { name, email, password, age, gender, bio, picture } = req.body;
   if (!email || !name || !password)
     res
       .status(400)
@@ -20,6 +19,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
     age,
     gender,
     bio,
+    picture,
   });
   await user.save();
   const token = jwt.generateToken(email);
@@ -79,13 +79,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     user,
     status: 200,
   });
-});
-
-exports.getUserMessages = asyncHandler(async (req, res, next) => {
-  const messages = await Message.find({
-    $or: [{ messenger: req.params.userID }, { reciever: req.params.userID }],
-  }).exec();
-  return res.status(200).json({ message: "Success", status: 200, messages });
 });
 
 exports.getUserPosts = asyncHandler(async (req, res, next) => {

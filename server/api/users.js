@@ -6,11 +6,14 @@ const {
   signUp,
   logIn,
   getUser,
-  getUserMessages,
   getUserPosts,
   postFriendRequest,
   putFriendRequest,
 } = require("../controllers/userController");
+const {
+  getUserMessages,
+  postUserMessages,
+} = require("../controllers/messageController");
 
 router.post("/", signUp);
 router.post("/login", logIn);
@@ -29,6 +32,7 @@ router.get(
 router.get("/", getUsers);
 router.get("/:userID", getUser);
 router.get("/:userID/messages", getUserMessages);
+router.post("/:userID/messages", postUserMessages);
 router.get("/:userID/posts", getUserPosts);
 router.post("/:friendID/friendRequests", postFriendRequest);
 router.put("/:friendID/friendRequests", putFriendRequest);

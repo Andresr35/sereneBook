@@ -17,6 +17,7 @@ const Signup = ({ url }) => {
     gender: "",
     bio: "",
     error: "",
+    picture: "",
   });
 
   const navigate = useNavigate();
@@ -123,6 +124,15 @@ const Signup = ({ url }) => {
               value={user.bio}
               placeholder="Enter Bio"
               onChange={(e) => setUser({ ...user, bio: e.target.value })}
+            />
+          </label>
+          <label>
+            Picture Url
+            <input
+              type="text"
+              value={user.picture}
+              placeholder="Enter Picture Url"
+              onChange={(e) => setUser({ ...user, picture: e.target.value })}
             />
           </label>
           <button type="submit">Sign Up</button>

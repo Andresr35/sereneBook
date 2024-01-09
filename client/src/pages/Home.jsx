@@ -1,12 +1,16 @@
 import Nav from "../components/Nav";
 import PropTypes from "prop-types";
 import Posts from "../components/Posts";
+import Chat from "../components/Chat";
 
 const Home = ({ url }) => {
   return (
     <>
       <Nav header={"Home Page"} url={url} />
       <main>
+        <div>
+          <Chat url={url} />
+        </div>
         <div>
           <h1>Welcome to Serene Book</h1>
           <Posts url={url} includeFriends={true} />

@@ -91,7 +91,10 @@ const Post = ({ post, setNewPost, url }) => {
       </p>
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}
 
-      <p onClick={handleLike}>Likes: {post.likes.length}</p>
+      <p onClick={handleLike} className={styles.icon}>
+        <img src="/like.svg" alt="Like Button" />
+        {post.likes.length}
+      </p>
       <button className={styles.icon} onClick={handleComment}>
         <div>{post.comments.length}</div>
         <img src="/chat.svg" alt="chat button img" />
