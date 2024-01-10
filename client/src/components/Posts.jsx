@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import Post from "../components/Post";
 import usePosts from "../hooks/usePosts";
 import CreatePost from "./CreatePost";
+import styles from "../assets/Post.module.css";
 
 const Posts = ({ url, includeFriends }) => {
   const { posts, setPosts } = usePosts(url, includeFriends);
@@ -15,17 +16,19 @@ const Posts = ({ url, includeFriends }) => {
   };
 
   return (
-    <div>
+    <div className={styles.postsContainer}>
       <CreatePost url={url} setNewPost={setNewPost} />
-      {posts &&
-        posts.map((post, index) => (
-          <Post
-            post={post}
-            key={index}
-            url={url}
-            setNewPost={(newPost) => setNewPost(newPost, index)}
-          />
-        ))}
+      <div className={styles.postContainer}>
+        {posts &&
+          posts.map((post, index) => (
+            <Post
+              post={post}
+              key={index}
+              url={url}
+              setNewPost={(newPost) => setNewPost(newPost, index)}
+            />
+          ))}
+      </div>
     </div>
   );
 };

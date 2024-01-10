@@ -9,10 +9,7 @@ const Home = ({ url }) => {
       <Nav header={"Home Page"} url={url} />
       <main>
         <Chat url={url} />
-        <div>
-          <h1>Welcome to Serene Book</h1>
-          <Posts url={url} includeFriends={true} />
-        </div>
+        <Posts url={url} includeFriends={true} />
       </main>
     </>
   );

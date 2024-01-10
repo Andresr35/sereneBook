@@ -40,16 +40,21 @@ const Comment = ({ comment, url, setPost }) => {
     <div className={styles.commentContainer}>
       {!error.length == 0 && <p>{error}</p>}
       <p>{comment.message}</p>
-      <p>{comment.date}</p>
-      <p>{comment.author.name}</p>
-      {authenticated && (
-        <button
-          className={styles.icon}
-          onClick={(e) => deleteComment(e, comment._id)}
-        >
-          <img src="/delete.svg" alt="Delete Button" />
-        </button>
-      )}
+      <div className={styles.commentAuthor}>
+        <p>{comment.author.name}</p>
+        <p>|</p>
+        <p>{comment.date}</p>
+
+        {authenticated && (
+          <button
+            className={styles.icon}
+            onClick={(e) => deleteComment(e, comment._id)}
+          >
+            <img src="/delete.svg" alt="Delete Button" />
+          </button>
+        )}
+      </div>
+      <hr />
     </div>
   );
 };

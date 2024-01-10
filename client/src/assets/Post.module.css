@@ -1,14 +1,67 @@
+.form {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--secondary);
+  border-radius: 20px;
+  padding: 7px;
+}
+.form hr {
+  background-color: var(--accent);
+  opacity: 0.25;
+  height: 2px;
+  border: none;
+}
+.form > div {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.form * {
+  background-color: var(--secondary);
+  border-radius: 10px;
+  border: none;
+}
+
+.form textarea {
+  flex: 2;
+}
+.form button {
+  padding: 0;
+}
+.postsContainer {
+  flex-grow: 3;
+  flex-basis: 500px;
+}
 .postContainer {
+  background-color: var(--primary);
+  color: black;
+  border-radius: 20px;
 }
-.timestamp {
+.post {
+  padding: 10px 15px;
 }
-.commentsContainer {
+.author {
+  text-align: center;
 }
-.commentContainer {
+.postData {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
 }
+.postData a {
+  color: var(--background);
+}
+.commentAuthor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .icon {
   padding: 0;
   position: relative;
+  background-color: transparent;
 }
 .icon img {
   width: 30px;
@@ -19,6 +72,9 @@
   width: 100%;
   height: 100%;
   position: absolute;
+}
+.icon .like {
+  top: 10px;
 }
 .addComment {
 }

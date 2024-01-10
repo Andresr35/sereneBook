@@ -35,19 +35,18 @@ const CreatePost = ({ url, setNewPost }) => {
   return (
     <div>
       {!error.length == 0 && <p>{error}</p>}
-      <form className={styles.container} onSubmit={createPost}>
-        <label className={styles.title}>
-          <input
-            type="text"
-            name="title"
-            id="title"
-            required
-            value={input.title}
-            placeholder="Enter Title"
-            onChange={(e) => setInput({ ...input, title: e.target.value })}
-          />
-        </label>
-        <label className={styles.message}>
+      <form className={styles.form} onSubmit={createPost}>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          required
+          value={input.title}
+          placeholder="Post Title"
+          onChange={(e) => setInput({ ...input, title: e.target.value })}
+        />
+        <hr />
+        <div>
           <textarea
             type="text"
             name="message"
@@ -55,10 +54,12 @@ const CreatePost = ({ url, setNewPost }) => {
             value={input.message}
             required
             onChange={(e) => setInput({ ...input, message: e.target.value })}
-            placeholder="Enter Message"
+            placeholder="Content"
           />
-        </label>
-        <button type="Submit">Add Post</button>
+          <button type="Submit">
+            <img src="/downSend.svg" alt="send button" />
+          </button>
+        </div>
       </form>
     </div>
   );

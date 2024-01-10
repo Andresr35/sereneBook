@@ -18,7 +18,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+* {
+  box-sizing: border-box;
+}
 a {
   font-weight: 500;
   color: var(--primary);
@@ -55,14 +57,14 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto var(--accent);
 }
 nav {
   display: flex;
   margin-left: auto;
   margin-right: auto;
   justify-content: space-between;
-  width: 80%;
+  padding: 10px;
 }
 nav ul {
   list-style-type: none;
@@ -86,4 +88,19 @@ select {
 }
 button img {
   width: 30px;
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--accent);
+}
+p {
+  margin: 0;
+}
+h4 {
+  margin: 0;
 }

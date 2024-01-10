@@ -1,11 +1,6 @@
 /**
  * This page will just handle putting a post on the page
  *
- * TODO
- * Don't allow the same user to like
- * If a post is yours allow to edit
- * add images to like, delete, and comment buttons
- *
  */
 
 import PropTypes from "prop-types";
@@ -76,38 +71,46 @@ const Post = ({ post, setNewPost, url }) => {
   };
 
   return (
-    <div className={styles.postContainer}>
+    <div className={styles.post}>
       <h4>{post.title}</h4>
       <hr />
       <p>{post.message}</p>
-      <p className={styles.timestamp}>Created: {post.date}</p>
-      <p>
-        <img
-          style={{ width: "50px", borderRadius: "100%" }}
-          src={post.author.picture}
-          alt="user Picture"
-        />
-        <Link to={post.author.url}>{post.author.name}</Link>
-      </p>
+      <div className={styles.postData}>
+        <div>
+          <button onClick={handleLike} className={styles.icon}>
+            <img src="/like.svg" alt="Like Button" />
+            <div className={styles.like}>{post.likes.length}</div>
+          </button>
+          <button className={styles.icon} onClick={handleComment}>
+            <div>{post.comments.length}</div>
+            <img src="/chat.svg" alt="chat button img" />
+          </button>
+          {authenticated && (
+            <>
+              {!deletePostError.length == 0 && <p>{deletePostError}</p>}
+
+              <button className={styles.icon} onClick={deletePost}>
+                <img src="/delete.svg" alt="Delete post" />
+              </button>
+            </>
+          )}
+        </div>
+        <div>
+          <p className={styles.timestamp}>{post.date}</p>
+          <hr />
+          <Link to={post.author.url} className={styles.author}>
+            <div>{post.author.name}</div>
+            <img
+              style={{ width: "50px", borderRadius: "100%" }}
+              src={post.author.picture}
+              alt="user Picture"
+            />
+          </Link>
+        </div>
+      </div>
+
       {!handleLikeError.length == 0 && <p>{handleLikeError}</p>}
 
-      <p onClick={handleLike} className={styles.icon}>
-        <img src="/like.svg" alt="Like Button" />
-        {post.likes.length}
-      </p>
-      <button className={styles.icon} onClick={handleComment}>
-        <div>{post.comments.length}</div>
-        <img src="/chat.svg" alt="chat button img" />
-      </button>
-      {authenticated && (
-        <>
-          {!deletePostError.length == 0 && <p>{deletePostError}</p>}
-
-          <button className={styles.icon} onClick={deletePost}>
-            <img src="/delete.svg" alt="Delete post" />
-          </button>
-        </>
-      )}
       {openComments && (
         <div className={styles.commentsContainer}>
           {post.comments.map((comment, index) => (
