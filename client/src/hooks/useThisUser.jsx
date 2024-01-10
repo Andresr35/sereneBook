@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const useThisUser = (url) => {
   const [user, setUser] = useState();
   const [authenticated, setAuthenticaed] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -16,7 +17,11 @@ const useThisUser = (url) => {
 
       if (res.status == 200) setAuthenticaed(true);
       else setAuthenticaed(false);
-      if (res.status == 401) navigate("/login");
+      if (res.status == 401) {
+        if (location.pathname == "/login" || location.pathname == "/signup")
+          return;
+        navigate("/login");
+      }
       const data = await res.json();
       setUser(data.user);
     };
