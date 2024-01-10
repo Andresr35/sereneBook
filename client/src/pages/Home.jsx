@@ -8,9 +8,7 @@ const Home = ({ url }) => {
     <>
       <Nav header={"Home Page"} url={url} />
       <main>
-        <div>
-          <Chat url={url} />
-        </div>
+        <Chat url={url} />
         <div>
           <h1>Welcome to Serene Book</h1>
           <Posts url={url} includeFriends={true} />

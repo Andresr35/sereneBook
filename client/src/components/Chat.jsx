@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import CreateMessage from "./CreateMessage";
 import { useNavigate } from "react-router-dom";
 import useThisUser from "../hooks/useThisUser";
+import styles from "../assets/Chat.module.css";
 
 const Chat = ({ url }) => {
   const [messages, setMessages] = useState([]);
@@ -77,15 +78,16 @@ const Chat = ({ url }) => {
   };
 
   return (
-    <div>
+    <div className={styles.chat}>
       <CreateMessage url={url} setMessages={setMessages} messages={messages} />
-      <p>{error}</p>
+      {error.length != 0 && <p>{error}</p>}
       {Object.entries(grabUsers()).map(([id, { name }]) => (
-        <div key={id} className="bubble">
+        <div key={id} className={styles.bubble}>
           <h4 onClick={() => toggleName(name)}>{name}</h4>
 
           {name == openMessage && (
             <div>
+              <hr />
               {messages
                 .filter(
                   (message) =>
@@ -97,16 +99,18 @@ const Chat = ({ url }) => {
                     key={index}
                     className={
                       message.messenger.name == user.name
-                        ? "messenger"
-                        : "reciever"
+                        ? styles.messenger
+                        : styles.reciever
                     }
                   >
                     {message.message}
                   </p>
                 ))}
               <form onSubmit={(e) => sendMessage(e, id)}>
-                <input type="text" placeholder="Enter Message" name="message" />
-                <button type="submit">Send</button>
+                <input type="text" placeholder="Message" name="message" />
+                <button type="submit">
+                  <img src="/downSend.svg" alt="send button" />
+                </button>
               </form>
             </div>
           )}

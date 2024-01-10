@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import useThisUser from "../hooks/useThisUser";
 import { useNavigate } from "react-router-dom";
+import styles from "../assets/Chat.module.css";
 
 const CreateMessage = ({ url, setMessages, messages }) => {
   const [error, setError] = useState("");
@@ -39,9 +40,8 @@ const CreateMessage = ({ url, setMessages, messages }) => {
   };
 
   return (
-    <div>
-      <h3>Send New Message </h3>
-      <form onSubmit={sendMessage}>
+    <>
+      <form onSubmit={sendMessage} className={styles.form}>
         {!error.length == 0 && <p>{error}</p>}
         <select
           name="recipient"
@@ -51,7 +51,7 @@ const CreateMessage = ({ url, setMessages, messages }) => {
           }
         >
           <option value="select" disabled>
-            Select User
+            Friend
           </option>
           {user &&
             user.friends.map((user, index) => (
@@ -60,15 +60,22 @@ const CreateMessage = ({ url, setMessages, messages }) => {
               </option>
             ))}
         </select>
-        <input
-          type="text"
-          placeholder="Enter Message"
-          value={message.message}
-          onChange={(e) => setMessage({ ...message, message: e.target.value })}
-        />
-        <button type="submit">Send Message</button>
+        <hr />
+        <div>
+          <input
+            type="text"
+            placeholder="Message"
+            value={message.message}
+            onChange={(e) =>
+              setMessage({ ...message, message: e.target.value })
+            }
+          />
+          <button type="submit">
+            <img src="/downSend.svg" alt="send button" />
+          </button>
+        </div>
       </form>
-    </div>
+    </>
   );
 };
 

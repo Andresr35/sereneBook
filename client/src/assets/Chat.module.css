@@ -1,0 +1,106 @@
+.chat {
+  margin-left: auto;
+  margin-right: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 200px;
+}
+.form {
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 20px;
+  padding: 7px;
+  background-color: var(--secondary);
+}
+.form * {
+  background-color: var(--secondary);
+  border-radius: 10px;
+}
+.form select {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+}
+.form > div {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.form > div > * {
+  width: inherit;
+  border: none;
+}
+.form hr {
+  background-color: var(--accent);
+  opacity: 0.25;
+  height: 2px;
+  border: none;
+}
+.form button {
+  padding: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+}
+.form input {
+  flex-grow: 4;
+  flex-shrink: 1;
+  flex-basis: 25%;
+}
+.form input:focus-visible {
+  outline: none;
+}
+.form select:focus-visible {
+  outline: none;
+}
+.bubble {
+  text-align: center;
+  border-radius: 100px;
+  background-color: var(--primary);
+  color: var(--background);
+  padding: 5px;
+}
+.bubble hr {
+  background-color: var(--accent);
+  opacity: 0.25;
+  height: 2px;
+  border: none;
+}
+.messenger {
+  text-align: left;
+}
+.reciever {
+  text-align: right;
+}
+.bubble > div {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.bubble input {
+  padding: 3px;
+  background-color: var(--secondary);
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  width: 100%;
+}
+input::placeholder {
+  color: var(--accent);
+}
+.bubble form {
+  border-radius: 20px;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  display: flex;
+  background-color: var(--secondary);
+}
+.bubble form button {
+  border-radius: 10px;
+  padding: 0;
+}
+.bubble img {
+  transform: rotate(180deg);
+}
