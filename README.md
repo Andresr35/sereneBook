@@ -2,6 +2,11 @@
 
 The Odin Project: OdinBook
 
+Test User:
+
+- email: andres.ruiz3561@gmail.com
+- password: password
+
 ## Description
 
 This project was meant as practice for creating full stack apps. This app is a copy of a social media app, similar to facebook or twitter. It allows you to create an account, send a message to other users privately, and share posts with friends.
