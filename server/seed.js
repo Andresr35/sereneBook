@@ -37,12 +37,19 @@ async function generateUsers(count) {
       message: faker.lorem.paragraph(),
       title: faker.lorem.words(),
     });
+    const postTwo = new Post({
+      author: user._id,
+      message: faker.lorem.paragraph(),
+      title: faker.lorem.words(),
+    });
     console.log(user);
-    // await user.save();
-    // await post.save();
+    await user.save();
+    await post.save();
+    await postTwo.save();
+    console.log("finished");
   }
 }
-generateUsers(1)
+generateUsers(4)
   .then((res) => {
     console.log(res);
   })

@@ -4,6 +4,7 @@ import useUsers from "../hooks/useUsers";
 import useThisUser from "../hooks/useThisUser";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Chat from "../components/Chat";
 
 const Friends = ({ url }) => {
   const { users, setUsers } = useUsers(url);
@@ -90,56 +91,72 @@ const Friends = ({ url }) => {
     <>
       <Nav header={"Add new friends?"} url={url} />
       <main>
-        <div>
+        <Chat url={url} />
+        <div className="friendButtons" style={{ flex: "1 1 70%" }}>
           <div>
             <p>Current Friends</p>
+            <hr />
             {user &&
               user.friends.map((friend, index) => (
                 <div key={index}>
-                  <img
-                    style={{ width: "50px", borderRadius: "100%" }}
-                    src={friend.picture}
-                    alt="user Picture"
-                  />
-                  <Link to={friend.url}>{friend.name}</Link>
+                  <Link to={friend.url}>
+                    <img
+                      style={{ width: "50px", borderRadius: "100%" }}
+                      src={friend.picture}
+                      alt="user Picture"
+                    />
+                    {friend.name}
+                  </Link>
                 </div>
               ))}
           </div>
-          <div>
-            <p>Current Requests</p>
-            {/* Here will lie the friend request */}
-            {!errors.handleRequestError.length == 0 && (
-              <p>{errors.handleRequestError}</p>
-            )}
-            {user &&
-              user.friendRequests.map((request, index) => (
-                <div key={index}>
-                  <img
-                    style={{ width: "50px", borderRadius: "100%" }}
-                    src={request.picture}
-                    alt="user Picture"
-                  />
-                  <Link to={request.url}>{request.name}</Link>
-                  <button onClick={(e) => handleRequest(e, true, request._id)}>
-                    <img src="plus.svg" alt="accept friend" />
-                  </button>
-                  <button onClick={(e) => handleRequest(e, false, request._id)}>
-                    <img src="delete.svg" alt="reject friend" />
-                  </button>
-                </div>
-              ))}
-          </div>
+          {user && user.friendRequests.length != 0 && (
+            <div>
+              <p>Current Requests</p>
+              <hr />
+              {/* Here will lie the friend request */}
+              {!errors.handleRequestError.length == 0 && (
+                <p>{errors.handleRequestError}</p>
+              )}
+              {user &&
+                user.friendRequests.map((request, index) => (
+                  <div key={index}>
+                    <Link to={request.url}>
+                      <img
+                        style={{ width: "50px", borderRadius: "100%" }}
+                        src={request.picture}
+                        alt="user Picture"
+                      />
+                      {request.name}
+                    </Link>
+                    <button
+                      onClick={(e) => handleRequest(e, true, request._id)}
+                    >
+                      <img src="plus.svg" alt="accept friend" />
+                    </button>
+                    <button
+                      onClick={(e) => handleRequest(e, false, request._id)}
+                    >
+                      <img src="delete.svg" alt="reject friend" />
+                    </button>
+                  </div>
+                ))}
+            </div>
+          )}
           <div>
             <p>Add?</p>
+            <hr />
             {users &&
               filterFriends().map((possibleFriend, index) => (
                 <p key={index}>
-                  <img
-                    style={{ width: "50px", borderRadius: "100%" }}
-                    src={possibleFriend.picture}
-                    alt="user Picture"
-                  />
-                  <Link to={possibleFriend.url}> {possibleFriend.name}</Link>
+                  <Link to={possibleFriend.url}>
+                    <img
+                      style={{ width: "50px", borderRadius: "100%" }}
+                      src={possibleFriend.picture}
+                      alt="user Picture"
+                    />
+                    {possibleFriend.name}
+                  </Link>
 
                   <button
                     onClick={(e) => sendFriendRequest(e, possibleFriend._id)}

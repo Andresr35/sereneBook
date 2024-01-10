@@ -104,3 +104,18 @@ p {
 h4 {
   margin: 0;
 }
+.friendButtons button {
+  padding: 0;
+  margin-left: 5px;
+}
+.friendButtons > div {
+  margin-bottom: 30px;
+}
+.friendButtons hr {
+  margin-left: 0;
+  background-color: var(--accent);
+  width: 80%;
+  opacity: 0.25;
+  height: 2px;
+  border: none;
+}
