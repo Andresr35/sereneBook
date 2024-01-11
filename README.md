@@ -4,7 +4,7 @@ The Odin Project: OdinBook
 
 Test User:
 
-- email: andres.ruiz3561@gmail.com
+- email: user@gmail.com
 - password: password
 
 ## Description
